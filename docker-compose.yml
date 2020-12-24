@@ -1,0 +1,20 @@
+version: '3'
+services:
+  database:
+    container_name: launchpadmanager-database
+    image: "postgres:9.6.19"
+    env_file:
+      - .env # configure postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+    networks:
+      - launchpadmanager_network
+
+volumes:
+  postgres_data:
+
+networks:
+  launchpadmanager_network:
+    driver: bridge

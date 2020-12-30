@@ -3,7 +3,10 @@ package launchpadmanagerdb
 import (
 	"database/sql"
 	"fmt"
-	"github.com/golang-migrate/migrate"
+
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
 	"os"
 )
@@ -12,7 +15,7 @@ const (
 	psqlUser     = "POSTGRES_USER"
 	psqlPassword = "POSTGRES_PASSWORD"
 	psqlHost     = "POSTGRES_HOST"
-	psqlSchema   = "POSTGRES_DATABASE"
+	psqlSchema   = "POSTGRES_DB"
 	psqlPort     = "POSTGRES_PORT"
 )
 

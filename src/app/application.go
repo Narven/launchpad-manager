@@ -15,5 +15,7 @@ var (
 )
 
 func StartApplication() {
+	mapUrls()
+
 	router.Run(fmt.Sprintf(":%s", os.Getenv(apiPort)))
 }

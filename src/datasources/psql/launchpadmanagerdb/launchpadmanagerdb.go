@@ -57,10 +57,6 @@ func init() {
 		panic(err)
 	}
 	if err = m.Up(); err != nil {
-		fmt.Println("ERRRORRRRRRRRRRRR")
-		panic(err)
+		fmt.Println(err)
 	}
-
-	fmt.Println("RUnNNING")
-
 }

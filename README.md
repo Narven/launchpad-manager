@@ -7,6 +7,8 @@
 * Copy `.env.example` to `.env` and make the necessary changes
 * `docker-compose up -d` will bring the containers up
 
+Run: `make`
+
 NOTES:
 
 Unfortunately you both share the same launchpads

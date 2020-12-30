@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	"github.com/Narven/launchpad-manager/src/logger"
 	"github.com/gin-gonic/gin"
 	"os"
 )
@@ -16,6 +17,8 @@ var (
 
 func StartApplication() {
 	mapUrls()
+
+	logger.Info("starting")
 
 	router.Run(fmt.Sprintf(":%s", os.Getenv(apiPort)))
 }

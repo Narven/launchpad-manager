@@ -1,7 +1,7 @@
 version: '3'
 services:
   database:
-    container_name: launchpadmanagerdb-database
+    container_name: launchpadmanager-database
     image: "postgres:9.6.19"
     env_file:
       - .env # configure postgres

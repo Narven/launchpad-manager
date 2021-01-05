@@ -1,7 +1,6 @@
 package tickets
 
 import (
-	"fmt"
 	"github.com/Narven/launchpad-manager/src/domain/tickets"
 	"github.com/Narven/launchpad-manager/src/logger"
 	"github.com/Narven/launchpad-manager/src/services"
@@ -18,8 +17,6 @@ func Create(c *gin.Context) {
 		c.JSON(restErr.Status, restErr)
 		return
 	}
-
-	fmt.Println("dasdasdadsds")
 
 	ticket, createErr := services.TicketService.CreateTicket(ticketRequest)
 	if createErr != nil {

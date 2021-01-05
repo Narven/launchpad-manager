@@ -38,11 +38,11 @@ func init() {
 		schema,
 	)
 
-	Client, err := sql.Open("postgres", datasourceName)
+	var err error
+	Client, err = sql.Open("postgres", datasourceName)
 	if err != nil {
 		panic(err)
 	}
-	defer Client.Close()
 
 	if err = Client.Ping(); err != nil {
 		panic(err)

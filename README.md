@@ -11,10 +11,9 @@ Run: `make`
 
 NOTES:
 
-Unfortunately you both share the same launchpads
+Unfortunately you both share the same launchpad's
 and you cannot launch your rockets from the same place on the same day.
-There is a list of available launchpads 
-and your spaceships go to places like: Mars, Moon, Pluto, Asteroid Belt, Europa, Titan, Ganymede.
+There is a list of available launchpad's and your spaceships go to places like: Mars, Moon, Pluto, Asteroid Belt, Europa, Titan, Ganymede.
 
 Every day you change the destination for all the launchpads.
 Basically on every day of the week from the same launchpad has to be a "flight" to a different place.

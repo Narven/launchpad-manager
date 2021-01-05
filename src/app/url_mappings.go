@@ -8,5 +8,6 @@ func mapUrls() {
 	{
 		v1.POST("/tickets", tickets.Create)
 		v1.GET("/tickets", tickets.GetAll)
+		v1.DELETE("/tickets/:id", tickets.Delete)
 	}
 }

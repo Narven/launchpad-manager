@@ -1,8 +1,14 @@
 # Coding Challenge
 
-Imagine it’s 2049 and you are working for a company called SpaceTrouble that sends people to different places in our solar system. You are not the only one working in this industry. Your biggest competitor is a less known company called SpaceX. Unfortunately you both share the same launchpads and you cannot launch your rockets from the same place on the same day. There is a list of available launchpads and your spaceships go to places like: Mars, Moon, Pluto, Asteroid Belt, Europa, Titan, Ganymede. Every day you change the destination for all the launchpads. Basically on every day of the week from the same launchpad has to be a “flight” to a different place.
+Imagine it’s 2049 and you are working for a company called SpaceTrouble that sends people to different places in our solar system.
+You are not the only one working in this industry.
+Your biggest competitor is a less known company called SpaceX.
+Unfortunately you both share the same launchpads and you cannot launch your rockets from the same place on the same day.
+There is a list of available launchpads and your spaceships go to places like: Mars, Moon, Pluto, Asteroid Belt, Europa, Titan, Ganymede.
+Every day you change the destination for all the launchpads.
+Basically on every day of the week from the same launchpad has to be a “flight” to a different place.
 
-Information about available launchpads and upcoming SpaceX launches you can find by SpaceX API: https://api.spacexdata.com/
+Information about available launchpads and upcoming SpaceX launches you can find by SpaceX API: GET https://api.spacexdata.com/v4/launches/latest
 
 Your task is to create an API that will let your consumers book tickets online.
 
@@ -19,7 +25,8 @@ Launchpad ID
 Destination ID
 Launch Date
 
-You have to verify if the requested trip is possible on the day from provided launchpad ID and do not overlap with SpaceX launches or launches already booked on your system, if that’s the case then your flight is cancelled.
+You have to verify if the requested trip is possible on the day from provided launchpad ID and do not overlap with
+SpaceX launches or launches already booked on your system, if that’s the case then your flight is cancelled.
 
 Endpoint to get all created Bookings.
 

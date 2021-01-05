@@ -10,6 +10,7 @@ import (
 const (
 	querySaveTicket    = "INSERT INTO ticket (first_name, last_name, gender, birthday, destination_id, launch_date) VALUES ($1,$2,$3,$4,$5,$6) RETURNING id"
 	queryGetAllTickets = "SELECT * FROM ticket"
+	queryDeleteTicket  = "DELETE FROM ticket WHERE id=$1"
 )
 
 func (ticket *Ticket) Save() *errs.RestErr {
@@ -41,8 +42,18 @@ func (ticket *Ticket) GetAll() (*[]Ticket, *errs.RestErr) {
 	err := db.Client.Select(&tickets, queryGetAllTickets)
 	if err != nil {
 		fmt.Println(err)
-		return nil, errs.NewBadRequestError("something wrong")
+		return nil, errs.NewBadRequestError("something wrong while gettting tickets")
 	}
 
 	return &tickets, nil
+}
+
+func (ticket *Ticket) Delete() *errs.RestErr {
+	_, err := db.Client.Exec(queryDeleteTicket, ticket.ID)
+	if err != nil {
+		fmt.Println(err)
+		return errs.NewBadRequestError("something wrong while deleting ticket")
+	}
+
+	return nil
 }

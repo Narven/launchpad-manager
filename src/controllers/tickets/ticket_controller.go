@@ -7,6 +7,7 @@ import (
 	"github.com/Narven/launchpad-manager/src/utils/errs"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 func Create(c *gin.Context) {
@@ -62,4 +63,19 @@ func GetAll(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, response)
+}
+
+func Delete(c *gin.Context) {
+	ticketID, paramErr := strconv.ParseInt(c.Param("id"), 10, 64)
+	if paramErr != nil {
+		c.JSON(http.StatusBadRequest, "bad params")
+	}
+
+	err := services.TicketService.DeleteTicket(ticketID)
+	if err != nil {
+		c.JSON(err.Status, err)
+		return
+	}
+
+	c.JSON(http.StatusNoContent, nil)
 }

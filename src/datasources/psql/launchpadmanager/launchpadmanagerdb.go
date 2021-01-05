@@ -1,12 +1,12 @@
 package launchpadmanagerdb
 
 import (
-	"database/sql"
 	"fmt"
 
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"os"
 )
@@ -20,7 +20,7 @@ const (
 )
 
 var (
-	Client   *sql.DB
+	Client   *sqlx.DB
 	user     = os.Getenv(psqlUser)
 	password = os.Getenv(psqlPassword)
 	host     = os.Getenv(psqlHost)
@@ -39,7 +39,7 @@ func init() {
 	)
 
 	var err error
-	Client, err = sql.Open("postgres", datasourceName)
+	Client, err = sqlx.Connect("postgres", datasourceName)
 	if err != nil {
 		panic(err)
 	}
@@ -57,6 +57,6 @@ func init() {
 		panic(err)
 	}
 	if err = m.Up(); err != nil {
-		fmt.Println(err)
+		fmt.Println("Migrations", err)
 	}
 }

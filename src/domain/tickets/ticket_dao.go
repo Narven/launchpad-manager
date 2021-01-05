@@ -1,26 +1,27 @@
 package tickets
 
 import (
-	"fmt"
 	db "github.com/Narven/launchpad-manager/src/datasources/psql/launchpadmanager"
 	"github.com/Narven/launchpad-manager/src/logger"
 	"github.com/Narven/launchpad-manager/src/utils/errs"
 )
 
 const (
-	querySaveTicket = "INSERT INTO ticket (first_name, last_name, gender, birthday, launchpad_id, destination_id, launch_date) VALUES ($1,$2,$3,$4,$5,$6,$7)"
+	querySaveTicket = "INSERT INTO ticket (first_name, last_name, gender, birthday, launchpad_id, destination_id, launch_date) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id"
 )
 
 func (ticket *Ticket) Save() *errs.RestErr {
-	fmt.Println(db.Client)
-	stmt, err := db.Client.Prepare(querySaveTicket)
-	if err != nil {
-		logger.Error("database error", err)
-		return errs.NewBadRequestError("database error")
-	}
-	defer stmt.Close()
+	tx := db.Client.MustBegin()
 
-	_, saveErr := stmt.Exec(
+	//stmt, err := tx.Prepare(querySaveTicket)
+	//if err != nil {
+	//	logger.Error("database error", err)
+	//	return errs.NewBadRequestError("database error")
+	//}
+	//defer stmt.Close()
+
+	var id int64
+	_ = tx.QueryRowx(querySaveTicket,
 		ticket.FirstName,
 		ticket.LastName,
 		ticket.Gender,
@@ -28,11 +29,15 @@ func (ticket *Ticket) Save() *errs.RestErr {
 		ticket.LaunchpadID,
 		ticket.DestinationID,
 		ticket.LaunchDate,
-	)
-	if saveErr != nil {
+	).Scan(&id)
+
+	if saveErr := tx.Commit(); saveErr != nil {
+		tx.Rollback()
 		logger.Error("database error", saveErr)
-		return errs.NewBadRequestError("dataase error")
+		return errs.NewBadRequestError("database error")
 	}
+
+	ticket.ID = id
 
 	return nil
 }

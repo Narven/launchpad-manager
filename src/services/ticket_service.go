@@ -23,6 +23,7 @@ func (s *ticketService) CreateTicket(ticketDto tickets.CreateTicketRequestDto) (
 	ticket.FirstName = ticketDto.FirstName
 	ticket.LastName = ticketDto.LastName
 	ticket.Birthday = ticketDto.Birthday
+	ticket.Gender = ticketDto.Gender
 	ticket.LaunchpadID = ticketDto.LaunchpadID
 	ticket.DestinationID = ticketDto.DestinationID
 	ticket.LaunchDate = ticketDto.LaunchDate

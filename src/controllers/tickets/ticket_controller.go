@@ -24,5 +24,16 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, ticket)
+	response := tickets.TicketResponseDto{
+		ID:            ticket.ID,
+		FirstName:     ticket.FirstName,
+		LastName:      ticket.LastName,
+		Gender:        ticket.Gender,
+		Birthday:      ticket.Birthday,
+		LaunchpadID:   ticket.LaunchpadID,
+		DestinationID: ticket.DestinationID,
+		LaunchDate:    ticket.LaunchDate,
+	}
+
+	c.JSON(http.StatusOK, response)
 }

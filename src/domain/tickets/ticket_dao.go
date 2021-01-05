@@ -1,13 +1,15 @@
 package tickets
 
 import (
+	"fmt"
 	db "github.com/Narven/launchpad-manager/src/datasources/psql/launchpadmanager"
 	"github.com/Narven/launchpad-manager/src/logger"
 	"github.com/Narven/launchpad-manager/src/utils/errs"
 )
 
 const (
-	querySaveTicket = "INSERT INTO ticket (first_name, last_name, gender, birthday, destination_id, launch_date) VALUES ($1,$2,$3,$4,$5,$6) RETURNING id"
+	querySaveTicket    = "INSERT INTO ticket (first_name, last_name, gender, birthday, destination_id, launch_date) VALUES ($1,$2,$3,$4,$5,$6) RETURNING id"
+	queryGetAllTickets = "SELECT * FROM ticket"
 )
 
 func (ticket *Ticket) Save() *errs.RestErr {
@@ -32,4 +34,15 @@ func (ticket *Ticket) Save() *errs.RestErr {
 	ticket.ID = id
 
 	return nil
+}
+
+func (ticket *Ticket) GetAll() (*[]Ticket, *errs.RestErr) {
+	var tickets []Ticket
+	err := db.Client.Select(&tickets, queryGetAllTickets)
+	if err != nil {
+		fmt.Println(err)
+		return nil, errs.NewBadRequestError("something wrong")
+	}
+
+	return &tickets, nil
 }

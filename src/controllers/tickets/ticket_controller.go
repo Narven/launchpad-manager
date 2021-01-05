@@ -37,3 +37,29 @@ func Create(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
+
+func GetAll(c *gin.Context) {
+	ticketList, getErr := services.TicketService.GetTickets()
+	if getErr != nil {
+		c.JSON(getErr.Status, getErr)
+		return
+	}
+
+	var response = make([]tickets.TicketResponseDto, 0)
+
+	for _, tick := range *ticketList {
+		t := tickets.TicketResponseDto{
+			ID:            tick.ID,
+			FirstName:     tick.FirstName,
+			LastName:      tick.LastName,
+			Gender:        tick.Gender,
+			Birthday:      tick.Birthday,
+			LaunchpadID:   tick.LaunchpadID,
+			DestinationID: tick.DestinationID,
+			LaunchDate:    tick.LaunchDate,
+		}
+		response = append(response, t)
+	}
+
+	c.JSON(http.StatusOK, response)
+}

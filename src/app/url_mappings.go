@@ -7,5 +7,6 @@ func mapUrls() {
 	v1 := router.Group("/v1")
 	{
 		v1.POST("/tickets", tickets.Create)
+		v1.GET("/tickets", tickets.GetAll)
 	}
 }

@@ -14,6 +14,7 @@ type ticketService struct {
 
 type ticketServiceInterface interface {
 	CreateTicket(ticket tickets.CreateTicketRequestDto) (*tickets.Ticket, *errs.RestErr)
+	GetTickets() (*[]tickets.Ticket, *errs.RestErr)
 }
 
 func (s *ticketService) CreateTicket(ticketDto tickets.CreateTicketRequestDto) (*tickets.Ticket, *errs.RestErr) {
@@ -33,4 +34,14 @@ func (s *ticketService) CreateTicket(ticketDto tickets.CreateTicketRequestDto) (
 	}
 
 	return &ticket, nil
+}
+
+func (s *ticketService) GetTickets() (*[]tickets.Ticket, *errs.RestErr) {
+	var ticket tickets.Ticket
+	ticks, err := ticket.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	return ticks, nil
 }

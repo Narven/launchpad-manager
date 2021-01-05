@@ -5,8 +5,6 @@ CREATE TABLE "public"."ticket"
     "last_name"      Character Varying NOT NULL,
     "gender"         Character Varying NOT NULL,
     "birthday"       Timestamp Without Time Zone NOT NULL,
-    "launchpad_id"   INT               NOT NULL,
-    "destination_id" INT               NOT NULL,
     "launch_date"    Timestamp Without Time Zone NOT NULL,
     CONSTRAINT "unique_tickets_id" UNIQUE ("id")
 );

@@ -13,13 +13,6 @@ const (
 func (ticket *Ticket) Save() *errs.RestErr {
 	tx := db.Client.MustBegin()
 
-	//stmt, err := tx.Prepare(querySaveTicket)
-	//if err != nil {
-	//	logger.Error("database error", err)
-	//	return errs.NewBadRequestError("database error")
-	//}
-	//defer stmt.Close()
-
 	var id int64
 	_ = tx.QueryRowx(querySaveTicket,
 		ticket.FirstName,

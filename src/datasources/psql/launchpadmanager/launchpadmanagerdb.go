@@ -53,7 +53,6 @@ func init() {
 		datasourceName,
 	)
 	if err != nil {
-		fmt.Println("ERRRORRRRRRRRRRRR")
 		panic(err)
 	}
 	if err = m.Up(); err != nil {

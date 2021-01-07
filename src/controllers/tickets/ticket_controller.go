@@ -50,8 +50,18 @@ func Create(c *gin.Context) {
 	}
 	defer res.Body.Close()
 
-	// TODO [] Get next launches and check against ticket https://api.spacexdata.com/v3/launches/upcoming
-	// TODO [] Get list of launch pads
+	// TODO [] Check agains SpaceX launchs
+	url = fmt.Sprintf(
+		"https://api.spacexdata.com/v3/launches/upcoming?site_id=%s&launch_date_utc=%s",
+		ticketRequest.LaunchpadID,
+		"2020-12-06T16:17:00.000Z",
+	)
+	res, getErr = http.Get(url)
+	if getErr != nil {
+		c.JSON(http.StatusBadRequest, "launchpad already reserved")
+		return
+	}
+	defer res.Body.Close()
 
 	ticket, createErr := services.TicketService.CreateTicket(ticketRequest)
 	if createErr != nil {

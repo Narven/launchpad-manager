@@ -9,4 +9,5 @@ require (
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/lib/pq v1.9.0
 	go.uber.org/zap v1.10.0
+	gotest.tools v2.2.0+incompatible
 )

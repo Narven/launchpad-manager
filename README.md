@@ -9,23 +9,6 @@
 
 Run: `make`
 
-NOTES:
-
-Unfortunately you both share the same launchpad's
-and you cannot launch your rockets from the same place on the same day.
-There is a list of available launchpad's and your spaceships go to places like: Mars, Moon, Pluto, Asteroid Belt, Europa, Titan, Ganymede.
-
-Every day you change the destination for all the launchpads.
-Basically on every day of the week from the same launchpad has to be a "flight" to a different place.
-
-# Request (Book Ticket)
-[POST] /tickets
-You have to verify if the requested trip is possible on the day from provided launchpad ID and do not overlap 
-with SpaceX launches or launches already booked on your system, if that’s the case then your flight is cancelled.
-
-# Endpoint to get all created Bookings.
-[GET] /bookings
-
 ## Migrations
 
 ```bash
@@ -34,8 +17,10 @@ migrate create -ext sql -dir db/migrations -seq <filename.sql>
 
 ### API
 
-Create Ticket
-```bash
+#### **POST** - /v1/tickets
+##### Description
+Book a ticket
+```sh
 curl -X "POST" "http://localhost:5000/v1/tickets" \
      -H 'Content-Type: application/json; charset=utf-8' \
      -d $'{
@@ -49,5 +34,11 @@ curl -X "POST" "http://localhost:5000/v1/tickets" \
 }'
 ```
 
+#### **GET** - /v1/tickets
+##### Description
+Get all Tickets
+```sh
+curl -X GET "http://localhost:5000/v1/tickets"
+```
 
-by SpaceTrouble Inc.
+_by SpaceTrouble Inc._

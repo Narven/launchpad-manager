@@ -41,6 +41,7 @@ func Create(c *gin.Context) {
 		return
 	}
 
+	// [x] Get one landing pad (https://api.spacexdata.com/v3/launchpads/{{site_id}})
 	url := fmt.Sprintf("https://api.spacexdata.com/v3/launchpads/%s", ticketRequest.LaunchpadID)
 	res, getErr := http.Get(url)
 	if getErr != nil {
@@ -49,8 +50,6 @@ func Create(c *gin.Context) {
 	}
 	defer res.Body.Close()
 
-	// TODO [] validate launchpad id (site_id)
-	// TODO [] Get one landing pad (https://api.spacexdata.com/v3/launchpads/{{site_id}})
 	// TODO [] Get next launches and check against ticket https://api.spacexdata.com/v3/launches/upcoming
 	// TODO [] Get list of launch pads
 

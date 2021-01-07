@@ -32,8 +32,22 @@ with SpaceX launches or launches already booked on your system, if that’s the 
 migrate create -ext sql -dir db/migrations -seq <filename.sql>
 ```
 
+### API
 
-
+Create Ticket
+```bash
+curl -X "POST" "http://localhost:5000/v1/tickets" \
+     -H 'Content-Type: application/json; charset=utf-8' \
+     -d $'{
+  "gender": "male",
+  "launch_date": "03-02-2021",
+  "destination_id": 2,
+  "last_name": "Doe",
+  "birthday": "01-02-2006",
+  "launchpad_id": "vafb_slc_4e",
+  "first_name": "John"
+}'
+```
 
 
 by SpaceTrouble Inc.

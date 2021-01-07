@@ -1,6 +1,7 @@
 package tickets
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/Narven/launchpad-manager/src/domain/tickets"
 	"github.com/Narven/launchpad-manager/src/logger"
@@ -10,6 +11,16 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+)
+
+type SpaceXLaunch struct {
+	FlightID      string `json:"flight_id"`
+	LaunchDateUTC string `json:"launch_date_utc"`
+	SiteID        string `json:"site_id"`
+}
+
+const (
+	spaceXApi = "https://api.spacexdata.com/v3"
 )
 
 func Create(c *gin.Context) {
@@ -38,51 +49,75 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	// [x] Get one landing pad (https://api.spacexdata.com/v3/launchpads/{{site_id}})
-	url := fmt.Sprintf("https://api.spacexdata.com/v3/launchpads/%s", ticketRequest.LaunchpadID)
+	// Get landing pad
+	url := fmt.Sprintf(
+		"%s/launchpads/%s",
+		spaceXApi,
+		ticketRequest.LaunchpadID,
+	)
 	res, getErr := http.Get(url)
 	if getErr != nil {
+		logger.Info(fmt.Sprintf("launchpad is not available: %s", ticketRequest.LaunchpadID))
 		c.JSON(http.StatusBadRequest, "launchpad not available")
 		return
 	}
 	defer res.Body.Close()
 
-	// [x] Check agains SpaceX launchs
-	url = fmt.Sprintf(
-		"https://api.spacexdata.com/v3/launches/upcoming?site_id=%s&launch_date_utc=%s",
+	// Check agains SpaceX upcomming launchs
+	url = fmt.Sprintf("%s/launches/upcoming?site_id=%s&launch_date_utc=%s",
+		spaceXApi,
 		ticketRequest.LaunchpadID,
 		ticketRequest.LaunchDate,
 	)
-	fmt.Println(url)
+
+	logger.Info(url)
 
 	// if we get and error, is because we did not found an SpaceX launch
 	// so we can book the ticket
-	res, getErr = http.Get(url)
+	resLaunches, getErr := http.Get(url)
 	if getErr != nil {
-		defer res.Body.Close()
-
-		ticket, createErr := services.TicketService.CreateTicket(ticketRequest)
-		if createErr != nil {
-			c.JSON(createErr.Status, createErr)
-			return
-		}
-
-		response := tickets.TicketResponseDto{
-			ID:            ticket.ID,
-			FirstName:     ticket.FirstName,
-			LastName:      ticket.LastName,
-			Gender:        ticket.Gender,
-			Birthday:      ticket.Birthday,
-			LaunchpadID:   ticket.LaunchpadID,
-			DestinationID: ticket.DestinationID,
-			LaunchDate:    ticket.LaunchDate,
-		}
-
-		c.JSON(http.StatusOK, response)
-	} else {
-		defer res.Body.Close()
-		c.JSON(http.StatusBadRequest, "launchpad already reserved")
+		// TODO what do we want to do in case we cannot get SpaceX information?
+		//  I choose to fail to prevent using the same launchpads
+		c.JSON(http.StatusInternalServerError, "spacex api error")
+		return
 	}
+	defer resLaunches.Body.Close()
+
+	// we need to check the result because this endpoint always returns 200
+	// we need to check the body
+	launchs := make([]SpaceXLaunch, 0)
+	marshallErr := json.NewDecoder(resLaunches.Body).Decode(&launchs)
+	if marshallErr != nil {
+		c.JSON(http.StatusInternalServerError, "spacex api error")
+		return
+	}
+
+	// if there is launchs we cannot create the ticket
+	if len(launchs) != 0 {
+		c.JSON(http.StatusBadRequest, "launchpad not available")
+		return
+	}
+
+	// All should be fine to create the ticket
+
+	ticket, createErr := services.TicketService.CreateTicket(ticketRequest)
+	if createErr != nil {
+		c.JSON(createErr.Status, createErr)
+		return
+	}
+
+	response := tickets.TicketResponseDto{
+		ID:            ticket.ID,
+		FirstName:     ticket.FirstName,
+		LastName:      ticket.LastName,
+		Gender:        ticket.Gender,
+		Birthday:      ticket.Birthday,
+		LaunchpadID:   ticket.LaunchpadID,
+		DestinationID: ticket.DestinationID,
+		LaunchDate:    ticket.LaunchDate,
+	}
+
+	c.JSON(http.StatusOK, response)
 }
 
 func GetAll(c *gin.Context) {

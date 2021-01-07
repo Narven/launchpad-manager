@@ -1,7 +1,6 @@
 package tickets
 
 import (
-	"fmt"
 	db "github.com/Narven/launchpad-manager/src/datasources/psql/launchpadmanager"
 	"github.com/Narven/launchpad-manager/src/logger"
 	"github.com/Narven/launchpad-manager/src/utils/errs"
@@ -42,7 +41,7 @@ func (ticket *Ticket) GetAll() (*[]Ticket, *errs.RestErr) {
 	var tickets []Ticket
 	err := db.Client.Select(&tickets, queryGetAllTickets)
 	if err != nil {
-		fmt.Println(err)
+		logger.Error("error while getting all tickets", err)
 		return nil, errs.NewBadRequestError("something wrong while gettting tickets")
 	}
 
@@ -52,7 +51,7 @@ func (ticket *Ticket) GetAll() (*[]Ticket, *errs.RestErr) {
 func (ticket *Ticket) Delete() *errs.RestErr {
 	_, err := db.Client.Exec(queryDeleteTicket, ticket.ID)
 	if err != nil {
-		fmt.Println(err)
+		logger.Error("error while deleting ticket", err)
 		return errs.NewBadRequestError("something wrong while deleting ticket")
 	}
 

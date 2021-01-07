@@ -25,12 +25,12 @@ curl -X "POST" "http://localhost:5000/v1/tickets" \
      -H 'Content-Type: application/json; charset=utf-8' \
      -d $'{
   "gender": "male",
-  "launch_date": "2021-02-02T19:10:000Z",
-  "destination_id": 2,
-  "last_name": "Doe",
+  "launch_date": "2021-02-03T19:10:000Z",
+  "destination_id": 3,
+  "last_name": "Luz",
   "birthday": "01-02-2006",
   "launchpad_id": "vafb_slc_4e",
-  "first_name": "John"
+  "first_name": "Pedro"
 }'
 ```
 

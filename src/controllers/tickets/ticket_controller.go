@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func Create(c *gin.Context) {
@@ -16,6 +17,21 @@ func Create(c *gin.Context) {
 		logger.Error("could not bind to json", err)
 		restErr := errs.NewBadRequestError("invalid payload")
 		c.JSON(restErr.Status, restErr)
+		return
+	}
+
+	t, err := time.Parse("01-02-2006", ticketRequest.LaunchDate)
+	if err != nil {
+		// TODO throw error
+	}
+	destination, getDestinationErr := services.DestionationService.GetDestination(ticketRequest.DestinationID)
+	if getDestinationErr != nil {
+		c.JSON(getDestinationErr.Status, getDestinationErr)
+		return
+	}
+	if time.Weekday(destination.Weekday) != t.Weekday() {
+		// throw error (destination is not possible on that date)
+		c.JSON(http.StatusBadRequest, "Destination not possible on that date")
 		return
 	}
 

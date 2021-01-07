@@ -16,7 +16,6 @@ In order to do that you have to create 2 endpoints:
 
 Endpoint to book a ticket where client sends data like:
 
-
 First Name
 Last Name
 Gender

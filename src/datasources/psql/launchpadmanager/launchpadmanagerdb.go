@@ -2,6 +2,7 @@ package launchpadmanagerdb
 
 import (
 	"fmt"
+	"github.com/Narven/launchpad-manager/src/logger"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
@@ -55,6 +56,6 @@ func init() {
 		panic(err)
 	}
 	if err = m.Up(); err != nil {
-		fmt.Println("Migrations", err)
+		logger.Error("Migrations", err)
 	}
 }

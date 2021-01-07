@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	queryGetDestination = ""
+	queryGetDestination = "SELECT id, name, weekday FROM destination WHERE id=$1"
 )
 
 func (destination *Destination) Get() *errs.RestErr {

@@ -22,7 +22,8 @@ func Create(c *gin.Context) {
 
 	t, err := time.Parse("01-02-2006", ticketRequest.LaunchDate)
 	if err != nil {
-		// TODO throw error
+		c.JSON(http.StatusInternalServerError, "error while handling launch date")
+		return
 	}
 	destination, getDestinationErr := services.DestionationService.GetDestination(ticketRequest.DestinationID)
 	if getDestinationErr != nil {

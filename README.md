@@ -9,11 +9,13 @@
 
 Run: `make`
 
-## Migrations
+#### Migrations
 
 ```bash
 migrate create -ext sql -dir db/migrations -seq <filename.sql>
 ```
+
+---
 
 ### API
 

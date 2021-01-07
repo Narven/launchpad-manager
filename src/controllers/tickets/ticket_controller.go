@@ -21,7 +21,7 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	t, err := time.Parse("01-02-2006", ticketRequest.LaunchDate)
+	t, err := time.Parse("2006-01-02T15:04:000Z", ticketRequest.LaunchDate)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, "error while handling launch date")
 		return
@@ -31,9 +31,6 @@ func Create(c *gin.Context) {
 		c.JSON(getDestinationErr.Status, getDestinationErr)
 		return
 	}
-
-	fmt.Println(time.Weekday(destination.Weekday))
-	fmt.Println(t.Weekday())
 
 	if time.Weekday(destination.Weekday) != t.Weekday() {
 		// throw error (destination is not possible on that date)
@@ -50,37 +47,42 @@ func Create(c *gin.Context) {
 	}
 	defer res.Body.Close()
 
-	// TODO [] Check agains SpaceX launchs
+	// [x] Check agains SpaceX launchs
 	url = fmt.Sprintf(
 		"https://api.spacexdata.com/v3/launches/upcoming?site_id=%s&launch_date_utc=%s",
 		ticketRequest.LaunchpadID,
-		"2020-12-06T16:17:00.000Z",
+		ticketRequest.LaunchDate,
 	)
+	fmt.Println(url)
+
+	// if we get and error, is because we did not found an SpaceX launch
+	// so we can book the ticket
 	res, getErr = http.Get(url)
 	if getErr != nil {
+		defer res.Body.Close()
+
+		ticket, createErr := services.TicketService.CreateTicket(ticketRequest)
+		if createErr != nil {
+			c.JSON(createErr.Status, createErr)
+			return
+		}
+
+		response := tickets.TicketResponseDto{
+			ID:            ticket.ID,
+			FirstName:     ticket.FirstName,
+			LastName:      ticket.LastName,
+			Gender:        ticket.Gender,
+			Birthday:      ticket.Birthday,
+			LaunchpadID:   ticket.LaunchpadID,
+			DestinationID: ticket.DestinationID,
+			LaunchDate:    ticket.LaunchDate,
+		}
+
+		c.JSON(http.StatusOK, response)
+	} else {
+		defer res.Body.Close()
 		c.JSON(http.StatusBadRequest, "launchpad already reserved")
-		return
 	}
-	defer res.Body.Close()
-
-	ticket, createErr := services.TicketService.CreateTicket(ticketRequest)
-	if createErr != nil {
-		c.JSON(createErr.Status, createErr)
-		return
-	}
-
-	response := tickets.TicketResponseDto{
-		ID:            ticket.ID,
-		FirstName:     ticket.FirstName,
-		LastName:      ticket.LastName,
-		Gender:        ticket.Gender,
-		Birthday:      ticket.Birthday,
-		LaunchpadID:   ticket.LaunchpadID,
-		DestinationID: ticket.DestinationID,
-		LaunchDate:    ticket.LaunchDate,
-	}
-
-	c.JSON(http.StatusOK, response)
 }
 
 func GetAll(c *gin.Context) {

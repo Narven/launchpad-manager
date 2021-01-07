@@ -19,8 +19,6 @@ type ticketServiceInterface interface {
 }
 
 func (s *ticketService) CreateTicket(ticketDto tickets.CreateTicketRequestDto) (*tickets.Ticket, *errs.RestErr) {
-	// TODO add validation
-
 	var ticket tickets.Ticket
 	ticket.FirstName = ticketDto.FirstName
 	ticket.LastName = ticketDto.LastName

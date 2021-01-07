@@ -1,6 +1,7 @@
 package tickets
 
 import (
+	"fmt"
 	"github.com/Narven/launchpad-manager/src/domain/tickets"
 	"github.com/Narven/launchpad-manager/src/logger"
 	"github.com/Narven/launchpad-manager/src/services"
@@ -30,11 +31,28 @@ func Create(c *gin.Context) {
 		c.JSON(getDestinationErr.Status, getDestinationErr)
 		return
 	}
+
+	fmt.Println(time.Weekday(destination.Weekday))
+	fmt.Println(t.Weekday())
+
 	if time.Weekday(destination.Weekday) != t.Weekday() {
 		// throw error (destination is not possible on that date)
 		c.JSON(http.StatusBadRequest, "Destination not possible on that date")
 		return
 	}
+
+	url := fmt.Sprintf("https://api.spacexdata.com/v3/launchpads/%s", ticketRequest.LaunchpadID)
+	res, getErr := http.Get(url)
+	if getErr != nil {
+		c.JSON(http.StatusBadRequest, "launchpad not available")
+		return
+	}
+	defer res.Body.Close()
+
+	// TODO [] validate launchpad id (site_id)
+	// TODO [] Get one landing pad (https://api.spacexdata.com/v3/launchpads/{{site_id}})
+	// TODO [] Get next launches and check against ticket https://api.spacexdata.com/v3/launches/upcoming
+	// TODO [] Get list of launch pads
 
 	ticket, createErr := services.TicketService.CreateTicket(ticketRequest)
 	if createErr != nil {

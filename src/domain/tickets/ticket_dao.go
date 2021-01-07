@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	querySaveTicket    = "INSERT INTO ticket (first_name, last_name, gender, birthday, destination_id, launch_date) VALUES ($1,$2,$3,$4,$5,$6) RETURNING id"
+	querySaveTicket    = "INSERT INTO ticket (first_name, last_name, gender, birthday, destination_id, launchpad_id, launch_date) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id"
 	queryGetAllTickets = "SELECT * FROM ticket"
 	queryDeleteTicket  = "DELETE FROM ticket WHERE id=$1"
 )
@@ -23,6 +23,7 @@ func (ticket *Ticket) Save() *errs.RestErr {
 		ticket.Gender,
 		ticket.Birthday,
 		ticket.DestinationID,
+		ticket.LaunchpadID,
 		ticket.LaunchDate,
 	).Scan(&id)
 

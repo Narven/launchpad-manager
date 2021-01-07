@@ -5,7 +5,7 @@ type CreateTicketRequestDto struct {
 	LastName      string `json:"last_name" binding:"required"`
 	Gender        string `json:"gender" binding:"required"`
 	Birthday      string `json:"birthday" binding:"required"`
-	LaunchpadID   int64  `json:"launchpad_id" binding:"required"`
+	LaunchpadID   string `json:"launchpad_id" binding:"required"`
 	DestinationID int64  `json:"destination_id" binding:"required"`
 	LaunchDate    string `json:"launch_date" binding:"required"`
 }
@@ -16,7 +16,7 @@ type TicketResponseDto struct {
 	LastName      string `json:"last_name"`
 	Gender        string `json:"gender"`
 	Birthday      string `json:"birthday"`
-	LaunchpadID   int64  `json:"launchpad_id"`
+	LaunchpadID   string `json:"launchpad_id"`
 	DestinationID int64  `json:"destination_id"`
 	LaunchDate    string `json:"launch_date"`
 }

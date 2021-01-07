@@ -6,7 +6,7 @@ type Ticket struct {
 	LastName      string `db:"last_name"`
 	Gender        string `db:"gender"`
 	Birthday      string `db:"birthday"`
-	LaunchpadID   int64  `db:"launchpad_id"`
+	LaunchpadID   string `db:"launchpad_id"`
 	DestinationID int64  `db:"destination_id"`
 	LaunchDate    string `db:"launch_date"`
 }
